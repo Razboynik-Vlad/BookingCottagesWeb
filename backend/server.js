@@ -16,8 +16,13 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // На любой запрос, который не является API, отдаем index.html
-app.get('/:splat*', (req, res) => {
+// Альтернативный надежный вариант:
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
+});
+
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend', 'dashboard.html'));
 });
 
 const pool = new Pool({
