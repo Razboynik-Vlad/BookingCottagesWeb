@@ -1,12 +1,23 @@
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+
+// Указываем Express, где лежат ваши статические файлы (html, css, js)
+// Если папка frontend находится уровнем выше, чем server.js:
+app.use(express.static(path.join(__current_dir, '../frontend')));
+
+// На любой запрос, который не является API, отдаем index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__current_dir, '../frontend', 'index.html'));
+});
 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
