@@ -12,11 +12,12 @@ app.use(express.json());
 
 // Указываем Express, где лежат ваши статические файлы (html, css, js)
 // Если папка frontend находится уровнем выше, чем server.js:
-app.use(express.static(path.join(__current_dir, '../frontend')));
+// __dirname — это стандартная переменная Node.js, которая указывает на текущую папку
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // На любой запрос, который не является API, отдаем index.html
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__current_dir, '../frontend', 'index.html'));
+    res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
 });
 
 const pool = new Pool({
