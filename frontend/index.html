@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добро пожаловать в Гордеют - Найдите уют вдали от дома</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ВАШИ ОРИГИНАЛЬНЫЕ СТИЛИ */
+        body { font-family: 'Inter', sans-serif; }
+        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .gradient-overlay { background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.1) 100%); }
+        .hover-lift { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .hover-lift:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
+        .animate-fade-in { animation: fadeIn 0.6s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .animated-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); overflow: hidden; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: float 20s infinite ease-in-out; }
+        .blob-1 { width: 400px; height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); top: -10%; left: -10%; animation-delay: 0s; }
+        .blob-2 { width: 300px; height: 300px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); bottom: -5%; right: -5%; animation-delay: -7s; }
+        .blob-3 { width: 250px; height: 250px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); top: 40%; left: 60%; animation-delay: -14s; }
+        @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(30px, -50px) scale(1.1); } 66% { transform: translate(-20px, 20px) scale(0.9); } }
+        .text-glow { text-shadow: 0 0 30px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 md:p-0">
+
+    <div class="animated-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div id="app" class="w-full max-w-6xl bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-[600px] animate-fade-in relative z-10">
+        
+        <div class="lg:w-1/2 relative h-64 lg:h-auto">
+            <img src="https://avatars.mds.yandex.net/get-altay/1987173/2a00000186a398e4bf28a07d1250b0369ae4/XXXL" alt="Beautiful modern interior" class="w-full h-full object-cover">
+            <div class="absolute inset-0 gradient-overlay"></div>
+            
+            <div class="absolute inset-0 flex flex-col justify-between p-8 text-white">
+                <div class="flex items-center gap-2">
+                    <div class="bg-white/20 backdrop-blur-md p-2 rounded-lg">
+                        <i data-lucide="home" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <span class="text-xl font-bold tracking-wide">Гордеют</span>
+                </div>
+
+                <div class="flex-1 flex items-center justify-center px-4">
+                    <div class="text-center space-y-4">
+                        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white text-glow leading-tight">
+                            Добро пожаловать в <br/>
+                            <span class="text-amber-400">Гордеют</span>
+                        </h2>
+                        <p class="text-xl md:text-2xl text-white/90 font-light tracking-wide text-glow">
+                            Найдите уют вдали от дома
+                        </p>
+                    </div>
+                </div>
+
+                <div class="glass-effect bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div class="space-y-1">
+                            <div class="flex justify-center mb-2"><i data-lucide="users" class="w-6 h-6 text-amber-400"></i></div>
+                            <div class="text-2xl font-bold">5k+</div>
+                            <div class="text-xs text-gray-200 uppercase tracking-wider font-medium">Счастливых гостей</div>
+                        </div>
+                        <div class="space-y-1 border-x border-white/20">
+                            <div class="flex justify-center mb-2"><i data-lucide="building-2" class="w-6 h-6 text-amber-400"></i></div>
+                            <div class="text-2xl font-bold">228</div>
+                            <div class="text-xs text-gray-200 uppercase tracking-wider font-medium">Коттеджа</div>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex justify-center mb-2"><i data-lucide="star" class="w-6 h-6 text-amber-400"></i></div>
+                            <div class="text-2xl font-bold">4.9</div>
+                            <div class="text-xs text-gray-200 uppercase tracking-wider font-medium">Рейтинг</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 pt-4 border-t border-white/20">
+                        <div class="flex items-center gap-3">
+                            <img src="https://avatars.mds.yandex.net/i?id=6953d857d90be32784f6627008ec287f46726825-5495295-images-thumbs&n=13" alt="Guest" class="w-10 h-10 rounded-full border-2 border-amber-400">
+                            <div class="text-left">
+                                <p class="text-sm font-medium">"Была свадьба, был вопрос с размещением гостей. Отличное место..."</p>
+                                <div class="flex items-center gap-1 mt-1">
+                                    <i data-lucide="star" class="w-3 h-3 fill-amber-400 text-amber-400"></i>
+                                    <i data-lucide="star" class="w-3 h-3 fill-amber-400 text-amber-400"></i>
+                                    <i data-lucide="star" class="w-3 h-3 fill-amber-400 text-amber-400"></i>
+                                    <i data-lucide="star" class="w-3 h-3 fill-amber-400 text-amber-400"></i>
+                                    <i data-lucide="star" class="w-3 h-3 fill-amber-400 text-amber-400"></i>
+                                    <span class="text-xs text-gray-300 ml-1">Анастасия</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center bg-white">
+            <div class="max-w-md w-full mx-auto space-y-8">
+                
+                <div class="text-center space-y-2">
+                    <h1 class="text-3xl font-bold text-gray-900">С Возвращением!</h1>
+                    <p class="text-gray-500">Зарегистрируйтесь, чтобы сохранить вашу бронь</p>
+                </div>
+
+                <div class="space-y-4">
+                    <button class="w-full flex items-center justify-center gap-3 px-4 py-3.5 border border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 group hover-lift bg-white">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        <span class="text-gray-700 font-medium group-hover:text-gray-900">Continue with Google</span>
+                    </button>
+
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-200"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray-500">или по email</span>
+                        </div>
+                    </div>
+
+                    <form class="space-y-4" @submit.prevent="loginUser">
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Email address</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i data-lucide="mail" class="w-5 h-5 text-gray-400"></i>
+                                </div>
+                                <input v-model="email" type="email" id="email" required class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors placeholder-gray-400 text-gray-900" placeholder="name@example.com">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i data-lucide="lock" class="w-5 h-5 text-gray-400"></i>
+                                </div>
+                                <input v-model="password" type="password" id="password" required class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors placeholder-gray-400 text-gray-900" placeholder="••••••••">
+                            </div>
+                            <div class="flex items-center justify-between mt-2">
+                                <div class="flex items-center">
+                                    <input id="remember-me" type="checkbox" class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded cursor-pointer">
+                                    <label for="remember-me" class="ml-2 block text-sm text-gray-600 cursor-pointer">Я вернусь🥰</label>
+                                </div>
+                                <a href="#" class="text-sm font-medium text-amber-600 hover:text-amber-500 transition-colors">Забыли пароль?</a>
+                            </div>
+                        </div>
+
+                        <div v-if="errorMessage" class="text-red-500 text-sm text-center bg-red-50 py-2 rounded-lg">
+                            {{ errorMessage }}
+                        </div>
+
+                        <button type="submit" :disabled="isLoading" class="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 disabled:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-all duration-200 hover-lift">
+                            {{ isLoading ? 'Загрузка...' : 'Войти' }}
+                        </button>
+                    </form>
+
+                    <div class="pt-4 border-t border-gray-100">
+                        <button @click="continueAsGuest" class="w-full flex items-center justify-center gap-2 px-4 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group">
+                            <i data-lucide="user" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                            <span class="font-medium">Продолжить как Гость</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="text-center text-sm text-gray-500">
+                    <p>Нет аккаунта? <a href="#" class="font-medium text-amber-600 hover:text-amber-500 transition-colors">Зарегистрируйтесь</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+    data() {
+        return {
+            isLoginMode: true, // true - Вход, false - Регистрация
+            email: '',
+            password: '',
+            isLoading: false,
+            errorMessage: '',
+            successMessage: ''
+        }
+    },
+    computed: {
+        formTitle() { return this.isLoginMode ? 'С Возвращением!' : 'Создать аккаунт'; },
+        formSubtitle() { return this.isLoginMode ? 'Войдите, чтобы сохранить вашу бронь' : 'Присоединяйтесь к нам сегодня'; },
+        submitButtonText() { 
+            if (this.isLoading) return 'Загрузка...';
+            return this.isLoginMode ? 'Войти' : 'Зарегистрироваться'; 
+        },
+        toggleText() { return this.isLoginMode ? 'Нет аккаунта? Зарегистрируйтесь' : 'Уже есть аккаунт? Войти'; }
+    },
+    methods: {
+        toggleMode() {
+            this.isLoginMode = !this.isLoginMode;
+            this.errorMessage = '';
+            this.successMessage = '';
+        },
+        async submitForm() {
+            this.isLoading = true;
+            this.errorMessage = '';
+            this.successMessage = '';
+
+            // ОПРЕДЕЛЯЕМ ЭНДПОИНТ (Сюда вставьте ссылку с Render!)
+            const backendUrl = 'https://gordeyut-api.onrender.com'; 
+            const endpoint = this.isLoginMode ? '/api/login' : '/api/register';
+
+            try {
+                const response = await fetch(`${backendUrl}${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: this.email, password: this.password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    this.successMessage = data.message || 'Успешно!';
+                    localStorage.setItem('userRole', data.role);
+                    
+                    // Небольшая задержка перед переходом в личный кабинет, чтобы юзер увидел успех
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html'; 
+                    }, 1000);
+                } else {
+                    this.errorMessage = data.message;
+                }
+            } catch (error) {
+                this.errorMessage = 'Ошибка подключения к серверу. Возможно, он "просыпается" (Render). Попробуйте еще раз через 30 секунд.';
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        continueAsGuest() {
+            localStorage.setItem('userRole', 'guest');
+            window.location.href = 'dashboard.html';
+        }
+    },
+    mounted() {
+        lucide.createIcons();
+        }
+    }).mount('#app');
+    </script>
+</body>
+</html>
