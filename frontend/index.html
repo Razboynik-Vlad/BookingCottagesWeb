@@ -104,7 +104,16 @@
             <div class="max-w-md w-full mx-auto space-y-8">
                 
                 <div class="text-center space-y-2">
-                    <h1 class="text-3xl font-bold text-gray-900">С Возвращением!</h1>
+                    <h2 class="text-3xl font-bold text-gray-900">
+                        {{ mode === 'login' ? 'С возвращением!' : 'Регистрация' }}
+                    </h2>
+
+                    <form @submit.prevent="submitForm" class="space-y-5">
+                        <button type="submit" :disabled="isLoading" class="w-full bg-amber-500 text-white py-3 rounded-xl font-bold hover:bg-amber-600 transition-all shadow-lg shadow-amber-200">
+                            <span v-if="isLoading text-white animate-pulse">Загрузка...</span>
+                            <span v-else>{{ mode === 'login' ? 'Войти' : 'Создать аккаунт' }}</span>
+                        </button>
+                    </form>
                     <p class="text-gray-500">Зарегистрируйтесь, чтобы сохранить вашу бронь</p>
                 </div>
 
