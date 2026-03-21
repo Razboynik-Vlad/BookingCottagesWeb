@@ -35,16 +35,20 @@ app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
     try {
         const result = await pool.query(
-            'SELECT role FROM users WHERE email = $1 AND password = $2',
+            'SELECT role, email FROM users WHERE email = $1 AND password = $2',
             [email, password]
         );
         if (result.rows.length > 0) {
-            res.json({ success: true, role: result.rows[0].role });
+            // Возвращаем роль из колонки 'role' (например, 'admin')
+            res.json({ 
+                success: true, 
+                role: result.rows[0].role, 
+                email: result.rows[0].email 
+            });
         } else {
             res.status(401).json({ success: false, message: 'Неверный email или пароль' });
         }
     } catch (err) {
-        console.error('Ошибка БД:', err);
         res.status(500).json({ success: false, message: 'Ошибка сервера' });
     }
 });

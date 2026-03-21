@@ -175,8 +175,14 @@
                 </div>
 
                 <div class="text-center text-sm text-gray-500">
-                    <p class="cursor-pointer font-medium text-amber-600 hover:text-amber-500 transition-colors" @click="toggleMode">
-                        {{ toggleText }}
+                    <p v-if="mode === 'login'">
+                        Нет аккаунта?
+                        <a href="#" @click.prevent="mode = 'register'" class="font-medium text-amber-600 hover:text-amber-500">Зарегистрироваться</a>
+                    </p>
+                    
+                    <p v-if="mode === 'register'">
+                        Уже есть аккаунт?
+                        <a href="#" @click.prevent="mode = 'login'" class="font-medium text-amber-600 hover:text-amber-500">Войти</a>
                     </p>
                 </div>
             </div>
@@ -194,7 +200,8 @@
             password: '',
             isLoading: false,
             errorMessage: '',
-            successMessage: ''
+            successMessage: '',
+            mode: 'login' // может быть 'login' или 'register'
         }
     },
     computed: {
@@ -216,6 +223,7 @@
             this.isLoading = true;
             this.errorMessage = '';
             this.successMessage = '';
+            
 
             // ОПРЕДЕЛЯЕМ ЭНДПОИНТ (Сюда вставьте ссылку с Render!)
             const backendUrl = 'https://bookingcottagesweb.onrender.com'; 
@@ -232,8 +240,10 @@
 
                 if (data.success) {
                     this.successMessage = data.message || 'Успешно!';
-                    localStorage.setItem('userRole', data.role);
-                    
+                    localStorage.setItem('userRole', data.role); // Тут будет 'admin' или 'user'
+                    localStorage.setItem('userEmail', data.email);
+                    window.location.href = '/dashboard';
+
                     // Небольшая задержка перед переходом в личный кабинет, чтобы юзер увидел успех
                     setTimeout(() => {
                         window.location.href = 'dashboard.html'; 
