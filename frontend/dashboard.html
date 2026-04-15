@@ -44,7 +44,7 @@
                 <div class="flex items-center gap-4 pb-6 border-b border-gray-200/60 mb-6">
                     <img :src="`https://ui-avatars.com/api/?name=${userEmail}&background=f59e0b&color=fff`" alt="Avatar" class="w-12 h-12 rounded-full border-2 border-amber-400">
                     <div>
-                        <h3 class="font-semibold text-gray-900 truncate w-32" :title="userEmail">{{ userEmail.split('@')[0] }}</h3>
+                        <h3 class="font-semibold text-gray-900 truncate w-32" :title="userEmail">{{ userName }}</h3>
                         <span class="text-xs font-medium text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full capitalize">{{ roleDisplayName }}</span>
                     </div>
                 </div>
@@ -142,34 +142,56 @@
         createApp({
             data() {
                 return {
-                    // Достаем данные, которые мы сохранили в localStorage на странице входа
-                    role: localStorage.getItem('userRole') || 'guest',
-                    userEmail: localStorage.getItem('userEmail') || 'guest@gordeyut.ru'
+                    role: 'guest',
+                    userEmail: 'Загрузка...',
+                    userName: 'Гость'
                 }
             },
             computed: {
-                // Логика отображения красивого названия роли
                 roleDisplayName() {
                     if (this.role === 'admin') return 'Администратор';
-                    return 'Пользователь';
+                    if (this.role === 'user') return 'Пользователь';
+                    return 'Гость';
                 }
             },
             methods: {
                 logout() {
-                    // Очищаем данные и уходим на главную
+                    localStorage.removeItem('token');
                     localStorage.removeItem('userRole');
                     localStorage.removeItem('userEmail');
+                    localStorage.removeItem('userName');
                     window.location.href = '/';
+                },
+                async checkAuth() {
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        // Если нет токена - редирект на логин (п. 3.5)
+                        window.location.href = '/';
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch('/api/auth/me', {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        const data = await response.json();
+
+                        if (data.success) {
+                            this.role = data.user.role;
+                            this.userEmail = data.user.email;
+                            this.userName = data.user.name;
+                        } else {
+                            // Токен протух или невалиден
+                            this.logout();
+                        }
+                    } catch (error) {
+                        console.error('Ошибка проверки авторизации', error);
+                    }
                 }
             },
             mounted() {
-                // Инициализируем иконки после загрузки Vue
                 lucide.createIcons();
-                
-                // Проверка: если данных нет, отправляем на логин
-                if (!localStorage.getItem('userRole')) {
-                    window.location.href = '/';
-                }
+                this.checkAuth();
             }
         }).mount('#app');
     </script>

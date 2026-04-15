@@ -139,6 +139,15 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i data-lucide="mail" class="w-5 h-5 text-gray-400"></i>
                                 </div>
+                                <div v-if="!isLoginMode">
+                                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1.5">Имя</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i data-lucide="user" class="w-5 h-5 text-gray-400"></i>
+                                        </div>
+                                        <input v-model="name" type="text" id="name" class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors placeholder-gray-400 text-gray-900" placeholder="Иван Иванов">
+                                    </div>
+                                </div>
                                 <input v-model="email" type="email" id="email" required class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors placeholder-gray-400 text-gray-900" placeholder="name@example.com">
                             </div>
                         </div>
@@ -199,73 +208,81 @@
         createApp({
     data() {
         return {
-            isLoginMode: true, // true - Вход, false - Регистрация
+            isLoginMode: true,
+            name: '',
             email: '',
             password: '',
             isLoading: false,
             errorMessage: '',
             successMessage: '',
-            mode: 'login' // может быть 'login' или 'register'
+            mode: 'login'
         }
     },
     computed: {
         formTitle() { return this.isLoginMode ? 'С Возвращением!' : 'Создать аккаунт'; },
         formSubtitle() { return this.isLoginMode ? 'Войдите, чтобы сохранить вашу бронь' : 'Присоединяйтесь к нам сегодня'; },
-        submitButtonText() { 
+        submitButtonText() {
             if (this.isLoading) return 'Загрузка...';
             return this.isLoginMode ? 'Войти' : 'Зарегистрироваться'; 
         },
         toggleText() { return this.isLoginMode ? 'Нет аккаунта? Зарегистрируйтесь' : 'Уже есть аккаунт? Войти'; }
     },
     methods: {
-        toggleMode() {
-            this.isLoginMode = !this.isLoginMode;
-            this.errorMessage = '';
-            this.successMessage = '';
-        },
-        async submitForm() {
-            this.isLoading = true;
-            this.errorMessage = '';
-            this.successMessage = '';
-            
+    toggleMode() {
+        this.isLoginMode = !this.isLoginMode;
+        this.errorMessage = '';
+        this.successMessage = '';
+    },
+    async submitForm() {
+        this.isLoading = true;
+        this.errorMessage = '';
+        this.successMessage = '';
+        
+        // ВНИМАНИЕ: Оставь пустую строку, если тестируешь локально, 
+        // или укажи ссылку Render для продакшена
+        const backendUrl = 'https://bookingcottagesweb.onrender.com/'; 
+        const endpoint = this.isLoginMode ? '/api/auth/login' : '/api/auth/register';
 
-            // ОПРЕДЕЛЯЕМ ЭНДПОИНТ (Сюда вставьте ссылку с Render!)
-            const backendUrl = 'https://bookingcottagesweb.onrender.com'; 
-            const endpoint = this.isLoginMode ? '/api/login' : '/api/register';
+        const bodyData = { email: this.email, password: this.password };
+        if (!this.isLoginMode) {
+            bodyData.name = this.name; // Отправляем имя при регистрации
+        }
 
-            try {
-                const response = await fetch(`${backendUrl}${endpoint}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: this.email, password: this.password })
-                });
+        try {
+            const response = await fetch(`${backendUrl}${endpoint}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyData)
+            });
 
-                const data = await response.json();
+            const data = await response.json();
 
-                if (data.success) {
-                    this.successMessage = data.message || 'Успешно!';
-                    localStorage.setItem('userRole', data.role); // Тут будет 'admin' или 'user'
-                    localStorage.setItem('userEmail', data.email);
+            if (data.success) {
+                if (this.isLoginMode) {
+                    // Сохраняем ТОКЕН для авторизации
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('userRole', data.user.role);
+                    localStorage.setItem('userEmail', data.user.email);
+                    localStorage.setItem('userName', data.user.name);
                     window.location.href = '/dashboard';
-
-                    // Небольшая задержка перед переходом в личный кабинет, чтобы юзер увидел успех
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html'; 
-                    }, 1000);
                 } else {
-                    this.errorMessage = data.message;
+                    this.successMessage = 'Успешно! Теперь войдите.';
+                    this.isLoginMode = true; // Переключаем на окно входа
                 }
-            } catch (error) {
-                this.errorMessage = 'Ошибка подключения к серверу. Возможно, он "просыпается" (Render). Попробуйте еще раз через 30 секунд.';
-            } finally {
-                this.isLoading = false;
+            } else {
+                this.errorMessage = data.message;
             }
-        },
-        continueAsGuest() {
-            localStorage.setItem('userRole', 'guest');
-            window.location.href = 'dashboard.html';
+        } catch (error) {
+            this.errorMessage = 'Ошибка подключения к серверу.';
+        } finally {
+            this.isLoading = false;
         }
     },
+    continueAsGuest() {
+        localStorage.clear();
+        window.location.href = '/dashboard';
+    }
+},
     mounted() {
         lucide.createIcons();
         }
