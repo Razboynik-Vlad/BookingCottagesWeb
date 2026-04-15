@@ -84,6 +84,34 @@ app.post('/api/auth/login', async (req, res) => {
     }
 });
 
+// === CRUD ЭНДПОИНТЫ (например, для коттеджей) ===
+
+// Получить все коттеджи (Доступно всем)
+app.get('/api/cottages', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM cottages');
+        res.json({ success: true, data: result.rows });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Ошибка получения данных' });
+    }
+});
+
+// Создать коттедж (Защищено: только авторизованные)
+app.post('/api/cottages', authenticateToken, async (req, res) => {
+    const { title, location } = req.body;
+    const ownerId = req.user.id;
+
+    try {
+        const newCottage = await pool.query(
+            'INSERT INTO cottages (title, location, "ownerId") VALUES ($1, $2, $3) RETURNING *',
+            [title, location, ownerId]
+        );
+        res.status(201).json({ success: true, data: newCottage.rows[0] });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Ошибка создания' });
+    }
+});
+
 app.get('/api/auth/me', authenticateToken, (req, res) => {
     res.json({ success: true, user: req.user });
 });
