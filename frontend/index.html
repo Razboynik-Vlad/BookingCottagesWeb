@@ -259,15 +259,13 @@
 
             if (data.success) {
                 if (this.isLoginMode) {
-                    // Сохраняем ТОКЕН для авторизации
                     localStorage.setItem('token', data.token);
-                    localStorage.setItem('userRole', data.user.role);
-                    localStorage.setItem('userEmail', data.user.email);
                     localStorage.setItem('userName', data.user.name);
-                    window.location.href = '/dashboard';
+                    window.location.href = '/dashboard'; // Переход по маршруту, а не по файлу!
                 } else {
-                    this.successMessage = 'Успешно! Теперь войдите.';
-                    this.isLoginMode = true; // Переключаем на окно входа
+                    this.successMessage = 'Регистрация успешна! Теперь войдите.';
+                    this.isLoginMode = true;
+                    this.password = ''; // Очистим пароль для удобства
                 }
             } else {
                 this.errorMessage = data.message;
